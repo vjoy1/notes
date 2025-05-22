@@ -1,0 +1,278 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage{xfrac}
+\usepackage{tikz}
+\usepackage{hyperref}
+
+\usepackage[a4paper,margin=0.3in]{geometry} % Required for inserting images
+\setlength{\parindent}{0pt}
+\pagenumbering{gobble}
+
+\begin{document}
+
+\section*{Optimisation Cheat Sheet}
+
+\subsection*{Chapter 2: Optimality}
+
+\begin{enumerate} [a.]
+    \item \textbf{Fermats Theorem and Stationary Point:} For \(f: U \to \mathbb{R}\) where \(U \subseteq \mathbb{R}^n\) then  optimal point \(x^* \in U^\circ \implies (\frac{\partial f}{\partial x_i} \text{ exists } \implies \nabla f(x^*)=0)\). A point in the interior where partial derivatives are defined and \(\nabla f(x^*)=0\) is called a stationary point.
+    \item \textbf{Second Order Classification:} If 
+    \[
+    x^* \text{ is a local min/max } \implies \nabla^2f(x^*) \succeq/\preceq 0 \quad \text{ and } \quad \nabla^2f(x^*) \succeq/\preceq 0 \implies x^* \text{ is a local min/max  or saddle}
+    \]
+    but
+    \[
+    \nabla^2f(x^*) \succ/\prec 0 \implies x^* \text{ is a local strict min/max}
+    \]
+    It is important to note that being a strict min/max does not mean the hessian is PD or ND.
+    \item \textbf{Saddle:} A saddle is a stationary point which is neither a local min or max. \(\nabla^2f(x^*)\) indefinite \(\implies x^*\) is a saddle but not the other way around because it could still have a positive semi-definite.
+    
+    \item \textbf{Coercive:} By weierstrass theorem, any coercive function admits a global minimum point where a coercive function \(f(x)\) is such that \(f(x)\to \infty\) as \(||x||\to \infty\).
+    
+    \item \textbf{Global Optimality:} \(f \in C^2 \implies (\nabla^2f(x)\succeq0 \;\forall\; x \in\mathbb{R}^n \implies (x^* \text{ local min} \implies x^* \text{ global min}))\)
+
+    \item \textbf{Quadratic Functions:} A quadratic function is \(f(x) = x^TAx + 2b^Tx+c\) where \(A\) is symmetric and \(\nabla f= 2Ax + 2b, \nabla^2 f = 2A\).
+    \begin{enumerate} [a.]
+        \item \(x^*\) is a global min \(\iff A \succeq 0 \;\wedge x^* = A^{-1}b\)
+        \item Coercive \(\iff A \succ 0\)
+        \item Positive \(\iff\) \(\begin{pmatrix}
+            A & b\\
+            b^T & c
+        \end{pmatrix} \succeq 0\)
+    \end{enumerate}
+\end{enumerate}
+
+\subsection*{Chapter 3: LS}
+
+\begin{enumerate} [a.]
+    \item \textbf{Regular Least Squares:} The solution to the problem 
+    \[
+    \min_{x \in \mathbb{R}^n} ||Sx-b||^2
+    \]
+    which has a unique solution \(x_{ls} = (S^TS)^{-1}S^Tb\) when \(S^TS\) is invertible which happens when it has full rank. When it is not full rank, then there are many minimisers.
+    
+    \item \textbf{Regularised Least Squares:} To add some regularity to the solution we instead solve the problem
+    \[
+    \min_{x \in \mathbb{R}^n} ||Sx-b||^2 + \lambda||Dx||^2
+    \]
+    which always has a() solution(s) but it is unique and given by \(x_{rls}= (S^TS+\lambda D^TD)^{-1}S^Tb\) when \((S^TS+\lambda D^TD)\) is invertible.
+
+    \item \textbf{Denoising:} Denoising is a specific kind of regularisation where we penalise large jumps between adjacent points.
+    \[
+    \min_{x \in \mathbb{R}^n} ||x-b||^2 + \lambda \sum_{i=2}^m(x_i-x_{i-1})
+    \]
+    which has solution \(x_{d} = (I + \lambda L^TL)^{-1}b\).
+
+    \item \textbf{Circle Fitting LS: }
+\end{enumerate}
+
+\subsection*{Chapter 4: Descent Methods}
+
+\begin{enumerate}
+    \item \textbf{Descent Direction:} For continuously differential \(f: \mathbb{R}^n \to R\), \(d\) is a descent direction of \(f\) if the directional derivative in the direction of \(d\) is negative. The optimal descent direction is given by \(-\nabla f(x)/||\nabla f(x)||\).
+    \item \textbf{Stepsize:} There are three choices in this course. Constant, exact and backtracking.
+    \begin{enumerate} [a.]
+        \item \textbf{Constant stepsize:} \(t^k = \bar t\) for all steps \(k\).
+        \item \textbf{Exact line search:} \(t^k \in \arg\min_{t\geq0} f(x^k-t \nabla f(x))\). The descent direction at each iteration in gradient descent with exact line search is orthogonal to the descent direction at the previous iteration.
+        \item \textbf{Backtracking:} Parameters \(s\), the initial step size, \(\alpha\) which controls how much we want to decrease at each step and \(\beta\), how much we scale the step size while we dont meet the following sufficient decrease condition
+        \[
+        f(x^k)-f(x^{k+1}) \geq \alpha t^k||\nabla f(x^k)||^2
+        \]
+    \end{enumerate}
+    \item \textbf{Gradient Descent:} For regular gradient descent we need to provide a tolerance parameter \(\epsilon\) and an initial starting point \(x_0\). Then we iteratively update the point in the direction of \(-\nabla f(x^k)\) using a step size selection procedure above. Gradient descent converges for \(C^{1,1}_L (\iff ||\nabla^2 f||\) bounded) functions which are bounded below. 
+    % \item \textbf{Condition Number:} For an \(n\times n\) P.D. matrix, the condition number is given by \(\kappa(A) = \frac{\lambda_{\max}(A)}{ \lambda_{\min}(A)}\). The condition number is important because if it is large, it means gradient descent might take many iterations to converge.
+    % \item \textbf{Scaled Gradient Descent:}
+    \item \textbf{Scaled and Gauss-Newton:} Given a tolerence and intial point, the scalred gradient descent method just scales the descent direction by a matrix \(D^k\) at iteration \(k\) and sets \(x^{k+1} \leftarrow x^k = - t^kD^k \nabla f(x^k)\)\\
+
+    The Gauss Newton method has the following scaling matrix
+    \[
+    D^k = \frac{1}{2}\left(J(x^k)^T J(x^k)\right)^{-1}
+    \]
+    but there are many alternatives for scaling, the main motivation is to make the problem better conditioned.
+
+    \item \textbf{Kaczmarz and SGD:} The Kaczmarz algorithm is a way to solve a linear system, \(Ax = b\) and the solution \(x\) is attained by fitting each \(x_i\) to \(b_i\). In the same spirit, for non-linear least squares, the SGD algorithm fits
+\end{enumerate}
+
+
+
+\subsection*{Chapter 5: Convex Functions}
+\begin{enumerate}
+    \item \textbf{Convex Function:} A function over a convex set is convex if
+    \[
+    f(\alpha x + (1-\alpha)y) \leq \alpha f(x) + (1- \alpha) f(y) \quad \text{ for all } x, y \in C \text{ and } \alpha \in [0,1]
+    \]
+    and first a second order characterisations are the important gradient inequality
+    \[
+    f(x) + \nabla f(x)^T(y- x) \leq f(y) \quad \text{ for all } x, y \in C
+    \]
+    and the hessian condition which is
+    \[
+    \nabla^2 f(x) \succeq 0 \quad \text{ for all } x, y \in C.
+    \]
+    Obviously for all these conditions, we need to impose the appropriate differentiability requirements.
+    \item \textbf{Operations which preserve convexity:}
+    \begin{enumerate} [a.]
+        \item Scalar multiplication and sums.
+        \item Affine transformation of input: If \(f\) is convex over \(C\) then \(g(y) = f(Ax+b)\) is convex over \(D = \{x \in \mathbb{R}^n: Ax+b \in C\}\).
+        \item Composition with non decreasing convex scalar function, ie \(g:I \to \mathbb{R}\) such that \(f(C) \subset I\) then \(g\; \circ \;f\) is convex over \(C\).
+        \item Pointwise maximum of family of convex functions is convex.
+        \item Partial minimisation of a convex function if \(f: C\times D \to \mathbb{R}\) then \(g(x) = \min_{y\in D}f(x,y)\) is convex.
+    \end{enumerate}
+    \item \textbf{Simple Theorems about Convex functions}
+    \begin{enumerate} [a.]
+        \item \textbf{Level Set Convex:} The level set of a function denoted Lev\((f, \alpha) = \{x\in C:f(x)=\alpha\}\) is convex.
+        \item \textbf{Convex function is continuous:} 
+        \item \textbf{Existence of directional derivative of convex function:} The directional derivative \(f'(x;d) = \lim_{t \downarrow 0} (f(x+td) -f(x))/t\) exists.
+        \item \textbf{No maximum in interior, if convex and compact, then maximum is at the extreme points.}
+    \end{enumerate}
+\end{enumerate}
+
+\subsection*{Chapter 6: Convex Optimisation}
+\begin{enumerate}
+    \item \textbf{Basic Theorems:} Local optimal points are global optimal points and the set of optimal points is convex (if strict, then it is a singleton).
+    \item \textbf{Optimisation over a convex set:} For a \(C^1\) function over a convex set we say it is stationary if the directional derivative from \(x^*\) is positive, ie. \(\nabla f(x^*)^T(x - x^*) \geq 0\) for all \(x \in C\). We trivially have that a local minimum is a stationary point. We want this definition because \(\nabla f(x^*)\) is not necessarily 0 at the optimal point (at a boundary). 
+    \item \textbf{Orthogonal Projection Operator:} This operator returns the closes point in a closed convex set to to the argument and is given by
+    \[
+    P_C(x) = \arg \min \{||y -x||^2:y \in C\}
+    \]
+    and for any non empty closed convex subset of \(\mathbb{R}^n\), this uniquely exists. Furthermore, an equivalent characterisation is
+    \[
+    z = P_C(x) \iff (x - z)^T(y - z) \leq 0 \text{ for all } y \in C
+    \]
+    and this basically says that the angle between \(y - z\) and \(x - z\) is more than \(\pi/2\) for any \(y \in C\). This is important because we can characterise stationary points as any point such that the orthogonal projection of any point in the direction of the gradient from that point is the point, or more concretely
+    \[
+    x^* = P_C(x^* - s\nabla f(x^*)
+    \]
+    \item \textbf{Gradient Projection Method:} Basically gradient descent and but we project the outcome at each iteration to the convex set. It is more useful if the projection is analytic and we do not have to numerically solve it at each iteration. Because we know that a stationary point is a fixed point to the above equation, we use that as a stopping criterion, ie
+    \[
+    G_L(x)= L\left(x - P_C\left(x - \frac{s}{L}\nabla f(x)\right)\right)
+    \]
+    \item \textbf{Frank Wolfe:} When the orthogonal projection is unavailable, we can use the Frank Wolfe algorithm
+    
+\end{enumerate}
+
+\subsection*{Chapter 7: Optimality Conditions}
+\begin{enumerate}
+    \item \textbf{Technincal Results:}
+    \begin{enumerate}[a.]
+        \item Separation Theorem: For a closed convex set \(C\) and \(y \notin C\), there exists \(p \in \mathbb{R}^n\setminus 0 \) such that \(p^Tx \leq \alpha\) and \(p^Ty > \alpha\) for all \(x \in C\). Basically Hahn Banach in finite dimensions.
+        \item Farkas Lemma: For \(c \in \mathbb{R}^n\) and \(A \in \mathbb{R}^{m \times n} \), \(Ax \leq 0\) and \(c^Tx > 0\) exclusively or \(A^Ty = c\) and \(y \geq 0\) where \(\geq, \leq\) denotes component-wise inequalities.
+        \item Farkas Lemma 2: \(\left(Ax \leq 0 \implies c^Tx \leq 0\right)\implies \exists \; y \in \mathbb{R}^m_+:A^Ty = c\)
+        \item Gordons Alternative: \(A^Tp= 0 \text{ for } p \in \mathbb{R}^m_+\setminus0 \) has a solution or \(Ax<0\) has a solution.
+    \end{enumerate}
+    \item \textbf{Linear KKT Conditions:} The KKT conditions basically say that the gradient of the objective function is a linear combination of the gradients of the active constraints (the weights of all other constraints are 0).
+    \begin{enumerate}[a.]
+        \item KKT conditions for Linearly Constrained Problems - Necessary Optimality Conditions: For continuously differentiable \(f : \mathbb{R}^n \to \mathbb{R}\) and the problem, \(\min f(x) \text{ for } x \in \{x : Ax\leq b\}\) we have
+        \[
+        \nabla f(x^*) = -  \sum^{m}_{i=1} \lambda_i a_i \quad \text{ and } \quad 
+        \lambda_i(a_i^Tx^* - b_i) = 0
+        \]
+        where \(x^*\) is a local minimum, \(\lambda_i \geq 0\) and \(a_i\) is the i-th row of \(A\).
+        
+        \item KKT Conditions for Convex Linearly Constrained Problems - Necessary and Sufficient Optimality Conditions: When we add the convexity requirement, we get the leftward implication of the above statement. It is important to note that even if a \(C^1\) function satisfies the KKT conditions above at a point, the point might not be a local minimum.
+        
+        \item KKT conditions for Linearly Constrained Problems: We can also add equality constraints to the continuously differentiable problem to get the problem, \(\min f(x) \text{ for } x \in \{x : Ax\leq b \wedge Cx = d\}\) for \(A \in \mathbb{R}^{m \times n}\) and \(C \in \mathbb{R}^{p \times n}\). Particularly we have
+        \[
+        x^* \text{ is local min} \implies \exists \lambda \in \mathbb{R}^m_+ \text{ and } \mu \in \mathbb{R}^p : \nabla f(x^*) = -A^T\lambda - C^T\mu\quad \text{ and } \quad 
+        \lambda_i(a_i^Tx^* - b_i) = 0
+        \]
+        Furthermore, if we have convexity, we get the leftward implication aswell.
+    \end{enumerate}
+    \item \textbf{Non-Linear KKT Conditions}: 
+    \begin{enumerate}[a.]
+        \item Feasible descent direction: Basically a direction you can go in which decreses the objective and is also contained in the convex set, \(C\). So, for \(x \in C, \;d \in \mathbb{R}^n : \nabla f(x)^T d < 0\) and \(x + \epsilon d \in C\).
+        \item For the continuously differentiable problem, \(\min f(x)\) for \( x\in \{x: g_i(x)\leq 0 \text{ for } i \in \{1, \dots, m\}\}\) where \(f, g_i \in C^1(C)\) we have that if \(x^*\) is a local minimum then there is no descent direction \(d \in \mathbb{R}^n\) such that \(\nabla f(x^*)^Td< 0\) and \(\nabla g_i(x^*)^T d<0\) for all active constraints. In effect there is no direction where we reduce all activate constrains and also reduce the objective.
+        \item Sufficiency of the KKT conditions for convex optimization problems:
+        For the convex \(C^1\) problem
+        \[
+        \begin{aligned}
+        \min\quad & f(x) \\
+        \text{subject to} \quad & g_i(x) \leq 0 && \text{for } i = 1, \dots, m \\
+        & h_i(x) \leq 0 && \text{for } i = 1, \dots, p \\
+        & s_i(x) = 0 && \text{for } i = 1, \dots, q
+        \end{aligned}
+        \]
+        with \(C^1\) convex functions \(f, g\) and affine \(h\), we have that if there exists \(\lambda \in \mathbb{R}^m_+, \eta \in \mathbb{R}^p_+\) and \(\mu \in \mathbb{R}\) such that 
+        \[
+        \nabla f(x^*) + \sum_{i = 1}^{m} \lambda_i \nabla g_i(x^*) + \sum_{i = 1}^{p} \eta_i \nabla h_i(x^*) + \sum_{i = 1}^{q} \mu_i \nabla s_i(x^*) = 0 \quad \text{ and } \quad \lambda_i g_i(x^*) = \eta_ih_i(x^*) = 0
+        \]
+        then \(x^*\) is an optimal point.
+
+        \item Necessary KKT conditions under the generalized \textbf{Slater}’s condition: Furthermore, if \(x^*\) is an optimal point and there exists \(\hat{x}\) such that
+        \[
+        \begin{aligned}
+        \quad & g_i(\hat{x}) < 0 && \text{for } i = 1, \dots, m \\
+        & h_i(\hat{x}) \leq 0 && \text{for } i = 1, \dots, p \\
+        & s_i(\hat{x}) = 0 && \text{for } i = 1, \dots, q
+        \end{aligned}
+        \]
+        then we get the rightward implication.
+    \end{enumerate}
+\end{enumerate}
+
+\subsection*{Chapter 8: Duality}
+\begin{enumerate}
+    \item \textbf{Langrangian and Dual Objective:} For the \textbf{primal} problem given by
+         \[
+        \begin{aligned}
+        &f^* = \min f(x) \\
+        \text{subject to} \quad & g_i(x) \leq 0 && \text{for } i = 1, \dots, m \\
+        & h_i(x) = 0 && \text{for } i = 1, \dots, p
+        \end{aligned}
+        \]
+    we have the lagrangian and the dual as 
+        \[
+        L(x,\lambda, \mu) = f(x)+\sum_{i=0}^{m} \lambda_i g_i(x) +\sum_{j=0}^{p} \mu_j h_j(x) \quad \text{ and } q(\lambda, \mu) = \min_{x \in X} L(x,\lambda, \mu)
+        \]
+    where \(\lambda \geq 0 \in \mathbb{R}^m\) and the \textbf{dual} problem is given by
+        \[
+        \begin{aligned}
+        &q^* = \max q(\lambda, \mu) \\
+        \text{s.t.} \quad& (\lambda, \mu) \in \text{dom}(q) := \{(\lambda, \mu) \in \mathbb{R}_+^m \times \mathbb{R}^p:q(\lambda, \mu)> - \infty\}
+        \end{aligned}
+        \]
+    Two import important facts about dual problem is that dom\((q)\) is convex and \(q\) is concave on it.
+    \item \textbf{Weak and Strong Duality:} For the primal and dual problem above we have that \(q^*\leq f^*\). This might not be so useful in practice because \(q^*\) might no exist or it might be \(-\infty\).\\
+    
+    Additionally, if we have only inequality constraints which are convex, 
+    
+        \[
+        \begin{aligned}
+        &f^* = \min f(x) \\
+        \text{subject to} \quad & g_i(x) \leq 0 && \text{for } i = 1, \dots, m \\
+        &x \in X
+        \end{aligned}
+        \]
+    where \(f,g, X\) are \textbf{convex}, and there exists \(\hat x \in X:g_i(\hat x)<0\) (Slater's condition), then \(|f^*|<\infty \implies q^*\) exists and \(q^* = f^*\).
+
+    \item \textbf{Complementary Slackness:} The complementary slackness theorem is useful because it tells us that if the optimal values of the primal and dual are equal \(f^*  = q^*\), then we can check solutions are optimal if they satisfy
+    \[
+    x^* =  \arg \min_{x \in X} L(x, \lambda^*) \quad \text{ and } \quad \lambda_i^* g_i(x)=0
+    \]
+    \item \textbf{General Strong Duality Conditions:} For
+    \[
+        \begin{aligned}
+        \min\quad & f(x) && \text{for convex }f\\
+        \text{subject to} \quad & g_i(x) \leq 0 && \text{for  convex $g_i$ } i = 1, \dots, m \\
+        & h_i(x) \leq 0 && \text{for affine $h_i$  } i = 1, \dots, p \\
+        & s_i(x) = 0 && \text{for affine $s_i$ } i = 1, \dots, q\\
+        & x \in \text{ convex }X
+        \end{aligned}
+    \]
+    then if there is \(\hat x\in \) int\((X)\) which satisfies the slates condition then \(|f^*|< \infty \implies q^* =f^*\).
+
+    \item \textbf{Dual Algorithms:} Primal object \(f\) can be convex/non-convex but dual will always be concave.
+    \begin{enumerate} [a.]
+        \item \textbf{Augmented Lagrangian:} The augmented Lagrangian for \(\min_{x \in X} \{f(x):Ax = b\}\) is given by
+        \[
+        L_{\alpha_k}(x,\mu) = L(x, \mu) + \frac{\alpha_k}{2}||Ax-b||^2
+        \]
+        and the augmented lagrangian method solves the problem for convex \(f(x)\) by iteratively solving the augmented Lagrangian for the optimal \(\mu \leftarrow \mu^k + \alpha_k(Ax-b)\).
+        \item \textbf{ADMM:} For the problem \(\min_{x, z \in X, Z} \{f(x) + g(z):Ax + Bz = c\}\). Basically the above but you alternative between \(x\) and \(z\) between each update of \(\mu\).
+    \end{enumerate}
+\end{enumerate}
+
+\end{document}
