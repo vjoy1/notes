@@ -1,0 +1,454 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage{xfrac}
+\usepackage{tikz}
+\usepackage{hyperref}
+
+\usepackage[a4paper,margin=0.3in]{geometry} % Required for inserting images
+\setlength{\parindent}{0pt}
+\pagenumbering{gobble}
+
+\title{functional_analysis_cheat_sheet}
+\author{Vasudev Joy}
+\date{April 2025}
+
+\begin{document}
+
+\section*{Functional Analysis}
+
+\subsection*{Defintions}
+
+\begin{enumerate}
+    \item \textbf{Linear space or Vector Space}: \(V\) an abelian group over a field \(\mathbb{K}\) for which we have distributivity of scalar multiplication over vector addition, distributivity of scalar multiplication w.r.t field addition, identity scalar and \((ab)\bar v = a(b \bar v)\). 
+
+    \item \textbf{$L^p$ spaces}: \(L^p(\mu)\equiv L^p(X, F, \mu) = \left\{f \in X \to \overline{\mathbb{K}} /_\sim :||f||_ {L^p} < \infty\right\}\) where 
+    
+    \(||f||_{L^p} = \begin{cases}
+        (\int|f|^p \;d\mu)^{1/p} & p < [1,\infty) \\
+        \text{esssup} \; |f| & p =\infty
+    \end{cases}
+    \)
+    Properties of \(L^p\)
+    \begin{enumerate} [a.]
+        \item Complete
+        \item \(||\cdot ||_p\) defines a norm (Minkowski: \(||f||_p + ||g||_p \geq ||f + g||_p\)).
+        \item Holder: For holder conjugates \(p, q \in [1,\infty]\), \(||fg||_1 \leq ||f||_p||g||_q\).
+    \end{enumerate}
+    \item \textbf{Compact}: 
+    \item \textbf{Complete}: A space \(X\) in which all cauchy sequences in \(X\) are convergent in \(X\).
+    \item \textbf{Banach}: A normed linear space which is complete w.r.t the induced metric.
+    \item \textbf{Separable}: Metric space \((V, \rho)\) is separable if there exists countable dense ie \(D \subset V: \overline{D} = V\).
+    \item \textbf{Schauder Basis:} For a normed vector space, \((X, || \cdot||)\), a schauder basis is \(\{e_n\}_{n \in \mathbb{N}}: \; \forall \; x \in X, \; \exists! \; (c_n): c_n \in \mathbb{R} \; \forall \; n \in \mathbb{N}\) and
+    \[
+    ||x - \sum_{k = 1}^n c_ke_k|| \to 0 \text{ as } n \to \infty
+    \]
+    \textbf{Theorem}: If \(X\) has a schauder basis, it is separable but the converse is not true.
+
+    \textbf{Pf:} \(D = \{\sum_iq_ie_i:q_i \in \mathbb{Q}\}\) is countable then take \(x \in X, r>0\) then need to show that \(D\) is dense, ie. show that we can approximate any point with a sequence in \(D\).
+    
+    \item \textbf{Hilbert}: A hilbert space is an inner product space \((H, \langle\cdot, \cdot\rangle) \) which is complete w.r.t. the induced metric of \(||\cdot || = \sqrt{\langle\cdot, \cdot\rangle}\). Also denote for \(S\subset H\), \(S^\perp = \{x \in H: \langle x, y \rangle = 0 \; \forall y \in S\}\)\\
+
+    \textbf{Parallelogram \textcolor{blue}{Law}}: For all \(x, y \in H\), \(2||x||^2 + 2 ||y||^2 = ||x + y||^2 + ||x - y||^2\)
+    
+    \textbf{Theorem: } For Hilbert space \((H, \langle\cdot, \cdot\rangle) \), and closed and convex \(K \subset H\),
+    \[
+    \forall \;y \in H, \; \exists!\; x_0 \in K: \delta := \inf_{x\in K} ||x- y|| = ||x_0 - y||
+    \]
+    ie, there is a unique closest point. \textbf{Pf:} Can assume \(y = 0\) wlog, then as \(\delta\) is an infimum, there exists \((x_n), x_n \in K\) such that \(\lim_{n\to\infty}||x_n|| = \delta\) then if we show this is a cauchy sequence we have that the limit \(x_0\) is in \(K\) as closed subsets of a complete space are complete. To show it is cauchy find \(N\) such that \(n \geq N \implies ||x_n||^2< \delta^2 + \epsilon^2/4 \) then as K is convex we have \((x_n + x_m )/2 \in K\) and therefore \(||(x_n - x_m)/2|| \geq \delta\) and hence by parallelogram law we have it is cauchy. To show this is unique, assume non unique and then show \(||(x_0 + x_1)/2|| < \delta\) to get a contradiction.
+
+    \textbf{Theorem: } \(S^\perp\) is closed and for closed subspace \(E \subset H\), \(H = E \oplus E^\perp\). Pf: for the first is using continuity of inner product. The \textbf{Pf} for the second is \(x \in E \cap E^\perp \implies \langle x, x \rangle  = 0 \implies E \cap E^\perp = \{0\}\). Then for [FINISH IF HAVE TIME]
+
+\end{enumerate}
+
+\subsection*{Extension to $\infty$}
+
+\begin{enumerate}
+    \item \textbf{Equivalence of Norms}: Two norms are equivalent if \(\exists \; c \in [1, \infty):||x||_1/c \leq ||x||_2 \leq c||x||_1\) (ie. generate the same topology, preserves convergence properties). Some immediate propositions are
+    \begin{enumerate} [a.]
+        \item Any two norms in finite dimensions are equivalent and also any finite dimensional normed space is complete (isomorphic to \(\mathbb{R}^n\)).
+        \item For a normed vector space \(X\), any subspace \(Y \subset X\) with dim\((Y) < \infty\) is complete and closed.
+    \end{enumerate}
+
+    For these propositions the Pfs involve basically representing each element in their finite basis expansion, then using the isomorphism of the the space to \(\mathbb{K}^n\) then using norm equivalence then using sandwich.
+    
+    \item \textbf{Sequential Compactness:} For metric space \((X, \rho)\), \(K \subset X\) is sequentially compact if every sequence has a convergent subsequence. \textbf{rmk:} Equivalent to compactness in metric spaces. For dim\(X < \infty\), we have Heine Borel but if dim\(X = \infty\) then we only have \(X\) compact \(\implies \) closed and bounded. We can take the \textcolor{red}{counter example} of \(K = \{e_i\} \subset \ell^1\) the canonical basis and we see \(K\) is bounded by 1 and also it is closed because any convergent sequence is eventually constant hence the limit point is contained in K. This is not compact because \((x_n) = (e_n)\) has no convergent subsequence. \textcolor{red}{Counter Example:} We can also see that for \((C[0,1], ||\cdot||_\infty)\), the closed unit ball \(\overline{B(0,1)}\) is not compact as the sequence \(f_n(t) = \sin(2^n \pi t)\) has no convergent subsequence because \(||f_n - f_m|| \geq 1 \; \forall \; m\neq n\).\\
+
+    \item \textbf{Reisz Lemma}: For normed space \((X, ||\cdot||)\), closed subspace \(Y \subset X\) with \(Y \neq X\),and \(\epsilon\in(0,1)\), we can find \(x \in X \setminus Y\) such that for 1) \(||x|| = 1\) and \(d(x, Y) > 1-\epsilon\). \textbf{Int:} We can find a point in the complement with unit length that is almost 1 away from Y.
+
+    \textbf{Pf:} We pick \(x^* \in X \setminus Y\) and \(y^* \in Y\) such that \(||x^* -y^*|| < d(x^*, Y)/(1 - \epsilon)\) then set \(x = (x^* -y^*)/||x^* -y^*|| \in X \setminus Y\) which satisfies the two requirements.
+
+    \item \textbf{Compactness of Closed Unit Ball:} For normed \((X, ||\cdot||)\), dim\( X < \infty \iff \overline{B_1} = \{x \in X: ||x||\leq 1\}\) is compact.\\
+    
+    \textbf{Pf:} \(\implies \) can be see using heine borel. For the other way we can show the contra positive that dim\(X = \infty \implies \overline{B_1}\) not compact. Pick \((y_n)\) a sequence of linearly independent vectors and set \(Y_n = \text{span}\{y_k:k\leq n\}\), then dim\(Y_n < \infty\) and hence \(Y_n\) is a closed subspace of \(X\) so we can use Reisz lemma to find \(x_n \in Y_n \setminus Y_{n-1}\) with \(||x_n|| = 1\) and \(d(x_n, Y_{n-1}) > 1/2\) so we see that \(d(x_i, x_j) > 1/2\) for all \(i \neq j\) and hence the bounded sequence \((x_n)\) does not admit a convergent subsequence and hence the closure of the unit ball is not compact.
+    
+\end{enumerate}
+
+\subsection*{Linear Operators}
+
+\begin{enumerate}
+    \item \textbf{Defintion of Linear Operator}: A linear operator is a linear function \(A: X \to Y\) where \((X, ||\cdot||_X)\) and \((Y, ||\cdot||_Y)\) are normed vector spaces.
+
+    \item \textbf{Bounded:} Linear map between normed spaces\(A:X \to Y\) is bounded if there exists \(C \in (0, \infty)\) such that \(||Ax||_Y \leq C||x||_X\) for all \(x \in X\). \textcolor{blue}{Useful Trick:} If we have \(||A|| = L< \infty\) then we can find a sequence of vectors \((x_n)\) such that \(Ax_n \to L\). Used in Pf of Reisz Rep.
+
+    \item \textbf{Operator Norm:} For bounded linear operators \(A: (X, ||\cdot||_X) \to (Y, ||\cdot||_Y)\), the operator norm is defined on \(\mathcal{L}((X, ||\cdot||_X), (Y, ||\cdot||_Y))(:= \{\text{bounded linear operators between X and Y}\})\) as
+    \[
+    ||A|| = \sup_{||x||_X \leq 1} ||Ax||_Y
+    \]
+
+    \item \textbf{Continuity}: For linear \(A: (X, ||\cdot||_X) \to (Y, ||\cdot||_Y)\) TFAE:
+    \begin{enumerate} [a.]
+        \item \(A\) is continuous at \(x_0 \in X\)
+        \item \(A\) is continuous for all \(x \in X\)
+        \item \(A\) is Lipschitz (ie. there exists \(L \in (0, \infty):||Ax - Ay||_Y \leq L||x - y||_X \)
+        \item \(A\) is bounded \((\implies ||Ax - Ay||_Y = ||A(x-y)||_Y \leq ||A||||x-y||_X\) so \(L = ||A||\) and we have d) \(\implies\) c)).
+    \end{enumerate}
+    As c to b to a is trivial we are done if we show \textbf{pf of a) to d)}: Assuming \(||A|| = \infty\) then there exists \((x_n) \subset X:x_n \in \overline{B_1} \) and \(0<||Ax_n||_Y \to \infty\). Defining \(z_n = x_n/||Ax_n||_Y\) we see that \(||z_n|| = ||x_n||/||Ax_n||_Y \to 0\) but also \(||A(x_0-z_n) - Ax_0||_Y = ||Az_n|| = 1\) which contradicts continuity of \(A\).
+    
+    \textbf{Cor:} If \(X\) is finite dimensional then linearity of A implies continuity. We can see this by defining \(||x||_* = ||x||_X + ||Ax||_Y\) which is a norm on \(X\), then by equivalence of norms in finite dimensional spaces we can find \(||x||_* \leq C||x||_X\) and hence \(||Ax||_Y \leq ((C-1) \vee 1)||x||_X\) so we have that \(A\) is bounded and hence continuous.
+    
+    \begin{enumerate} [a.]
+        \item \textcolor{red}{Counterexample 1:} \(X = Y = C([0,1])\), \(||\cdot||_X = ||\cdot||_1\), and \(||\cdot||_Y = ||\cdot||_\infty\), then \(A = id\) is not bounded equivalently, continuous which we can see by taking the triangle with area one functions and seeing that the supremum of peaks is infinite yet the area is bounded.
+        \item \textcolor{red}{Counterexample 2:} \(X = C^1[0,1], Y = C[0,1], A = d/df\) with \(||\cdot||_\infty\) then \(A\) is unbounded, we can take \(f_n(x) = \sin(2^n\pi x)\) and these are bounded by 1 but have unbounded derivative wrt sup norm.
+    \end{enumerate}
+
+    \item \textbf{Space of Linear Operators}: If \((Y,||\cdot||)\) is Banach then so is \((\mathcal{L}(X, Y), ||\cdot||_{\mathcal{L}(X, Y)})\). Importantly, the domain \(X\) need not be Banach, it only has to be a normed vector space to ensure that the operator norm is well defined.
+
+    \item \textbf{Cor:} \(A\in L(X,Y), K\) compact \( \implies A(K)\) compact. \textbf{Pf:} Follows from continuity of \(A\).
+\end{enumerate}
+
+\subsection*{Duality}
+
+\begin{enumerate}
+    \item \textbf{Dual}: For normed vector space \((X, ||\cdot||_X)\), we denote \(X^* := \mathcal{L}(X, \mathbb{R})\) ie the space of bounded linear functions from \(X\) to \(\mathbb{R}\) whose members are usually called functionals. By previous theorem, this is complete.
+
+    \item \textbf{Riesz Map:} For a Hilbert space \((H, \langle\cdot, \cdot\rangle) \), \(\Lambda_y = \langle y, \cdot\rangle \). We can show \(\Lambda_y \in H^*\) and \(\Lambda:H \to H^*, y \to \Lambda_y\) is a linear isometry (ie.  \(||y||_H = ||\Lambda_y||_*\) where \(||\cdot||_*:=\sup_{x\in H, ||x||\leq1}|\langle y, x\rangle|\), the norm on \(H^*\)).
+
+    \item \textbf{Riesz Representation Theorem:} For every \(\ell \in H^*\), \(\exists!\; y \in H:\ell = \Lambda_y\) aka \(\Lambda\) is an isomorphism and \(H \cong H^*\).
+
+    \textbf{Pf}: Consider \(\ell \in H^*\) and if \(\ell(x) = 0\) then \(\ell = \Lambda_0\) which is unique because assume there is something else then \(0=\langle 0, z\rangle + \langle z , z\rangle = \langle z, z\rangle = ||z||^2 = 0 \implies z = 0\). Hence assume \(\ell \neq 0\) and also wlog \(||\ell||_* = 1\) as we can normalise. Then as \(||\ell||_* = 1\), we can find a sequence \((y_n) \subset H\) with \(||y_n|| = 1\) by such that \(\ell(y_n) \to 1\) by definition of the operator norm. Then we see that this sequence is cauchy because \(||y_n - y_m||^2 = 2(||y_n||^2 + ||y_m||^2) - ||y_n + y_m||^2= 2- ||y_n+y_m||^2\) and \(\ell(y_m) + \ell(y_n) = \ell (y_m + y_n) \leq ||y||_* ||y_m + y_n||_H = \sqrt{2 - ||y_n - y_m||^2}\geq 2\) as \(\ell(y_m) + \ell(y_n) \to 2\) by choice of \((y_n)\). Then as \(H\) is complete we have a limit point \(y \in H\). Then we decompose \(H = \text{span}(\{y\}) \oplus \text{span}(\{y\})^\perp\) and see that \(\ell(y) = \lim_n \ell(y_n) = 1 = ||y||^2_H = \langle y, y \rangle = \Lambda_y\). So \(\ell\) coincides with \(\Lambda_y\) for all \(y\) in \(\text{span}(\{y\})\) by linearity. If we then show that it also coincides on \(\text{span}(\{y\})^\perp\) the we have that it coincides on \(H\) by the closed subspace decomposition of \(H\). So take such \(x \in \text{span}(\{y\})^\perp\) then assume wlog \(||x||_H = 1\) and then we \textcolor{blue}{look} in the direction of \(x\) to see that \(||y_a||_H := ||(y + a x)/(\sqrt{1 + a^2})||_H = 1\) and hence \(\ell(y_a) \leq |\ell(y_a)| \leq ||\ell||_*||y_a|| = 1 = \ell(y) \implies a = 0\) is a global max and hence \(0 = D_a \ell(y_a)|_{a = 0} \implies \ell(x) = 0 \) and so \(\ell = \Lambda_y\) on \(H\). To show uniqueness repeat same argument used for \(\ell = 0.\)
+
+    \item \textbf{Duality in Banach}: For all \(p \in (1, \infty)\) and its holder conjugate \(q\), \((\ell^p)^* \cong \ell^q\) and infact can be extended to \(L^p(\mu)^* \cong L^q(\mu)\) for \(p \in [1,\infty)\) (where \(q = \infty\) when \(p=1\)).
+
+    \textbf{Strat:} First define a potential \(\Lambda\) and show it is a linear isometry ie. \(||\Lambda y||_* = ||y||_H\) then show that this is bijective by showing that for any \(\ell \in H^*\) we can identify it with \(y  = (y_n) = (\ell(e_n))\).
+    
+    \textbf{Pf:} Take \(y \in \ell^q\) and define \(\Lambda_y  :\ell^p \to \mathbb{R}\) such that \(\Lambda_y(x) = \sum y_nx_n\) and assert that
+    \begin{enumerate} [a.]
+        \item \(\Lambda_y \in (\ell^p)^*\). \textbf{pf} \(|\Lambda_y(x)| \overset{\triangle}{\leq} \sum |x_ny_n| = ||xy||_1 \leq ||x||_p||y||_q \) so the sum is finite
+        \item \(\Lambda:\ell^q \to (\ell^p)^*\) is a linear isometry. \textbf{pf} \(||\Lambda_y||_* = \sup_{||x||\leq 1}|\Lambda_y(x)| \leq ||y||_q\) but also \textcolor{blue}{taking} \((x_n)\) with \(x_n = sgn(y_n)|y_n|^{q-1}\) we see that \((x_n) \in \ell^p\) because \(||x||^p_p = \sum |x_n|^p = \sum |y_n|^q = ||y||_q^{q-1}\) where we use the fact that \(p^{-1} = (q-1)q^{-1}\). Then (this is where the sign comes in), we see \(\Lambda_y(x) = \sum |y_n|^q = ||y||_q^q = ||y||_q ||x||_p\) then \(||\Lambda_y||_* =\sup_{||x||_p \leq1} |\Lambda_y(x)|\geq ||y||_q\) so \(\Lambda\) is an isometry.
+    \end{enumerate}
+    then we also know that \(\Lambda\) is injective because if \(\Lambda_y = \Lambda_{y'}\) then \(\sum y_n' x_n - \sum y_n x_n = 0\) for all \(x \implies y = y'\). Next if we show that \(\Lambda\) is surjective then we have that it is bijective and therefore an isomorphism. To show it is surjective, we consider \(\ell \in (\ell^p)^*\) and we need to show that there is a \(y \in \ell^q\) such that \(\ell = \Lambda_y\). A candidate \(y\) is \(y_n = \ell(e_n)\). Then taking \(x \in \ell^p\) as above, we see that \(\ell(x^{(n)} ) = \sum sgn(y_i)|y_i|^{q-1}\ell(e_i) = \sum|y^{(n)}|^q = ||y^{(n)}||^q_q \leq ||\ell||_*||x||_p<\infty\) and so as we have a uniform bound on \(||y^{(n)}||^q_q \to ||y||^q_q\) we have that \(y \in \ell^q \). Then we are left to show that \(\ell = \Lambda_y\) to get that \(\Lambda\) is surjective which can do by taking \(x \in \ell^p\) then showing that the action of \(\ell\) and \(\Lambda_y\) are the same. As we now that \(\Lambda_y\) is continuous, we can truncate \(x\) and find for any \(\epsilon)\), an \(n\) such that \(|\ell(x) - \ell(x^{(n)})| < \epsilon/2\) and \(|\Lambda_y(x) - \Lambda(x^{(n)})| < \epsilon/2\) and then we get 
+    \[
+    |\ell(x) - \Lambda_y(x)| \leq 
+    |\ell(x) - \ell(x^{(n)})| + 
+    \underset{
+      \substack{
+        = 0 \text{ as } \ell(x^{(n)}) = \sum x_i \ell(e_i) \\ 
+        = \sum x_i y_i = \Lambda_y(x)
+      }
+    }{|\ell(x^{(n)}) - \Lambda_y(x^{(n)})|} 
+    + |\Lambda_y(x) - \Lambda_y(x^{(n)})| 
+    \boldsymbol{\leq} \epsilon
+    \]
+
+    \item \textbf{Counterexample} For \(\ell^\infty\), \(\Lambda: \ell^1 \to (\ell^\infty)^*\) is still a linear isometry but it isnt surjective. To see this take \(c_0 = \{(x_n):\lim x_n = 0\} \subset \ell^\infty\) to see that \((c_0)^* \cong \ell^1\).
+
+    \item \textbf{Dual Operators}: For normed spaces \((X, ||\cdot||_X)\) and \((Y, ||\cdot||_Y)\), \(A \in \mathcal{L}(X, Y)\), the dual operator of \(A\) is given by
+    \begin{gather*}
+    A^* : L(Y,  \mathbb{R}) \to L(X, \mathbb{R}) \text{ or equivalently }A^*:Y^* \to X^* \\A^*y^* = y^*\circ A 
+    \end{gather*}
+    intuitively, \(A^*\) takes a functional from \(Y^*\) to a functional from \(X^*\) by composing \(y^*\) with \(A\). We will also see that \(A^*\) is bounded and that \(||A^*|| = ||A||\). 
+
+    \textbf{Examples}
+    \begin{enumerate} [a.]
+        \item For Hilbert space and \(A: H \to H\) and \(A^*:H^* \to H^*\) we have the adjoint operator of \(A\) given by
+        \begin{gather*}
+        \tilde A^* = \Lambda^{-1} \circ A^* \circ \Lambda \text{ where } \Lambda:H\to H^* \text{ is the canonical isomorphism}\\
+        \;\langle \tilde A^*y, x\rangle= \langle y, Ax\rangle \;\forall \; x, y \in H
+        \end{gather*}
+        If \(\tilde A^* = A\), then \(A\) is a self adjoint operator
+        \item \(L_A:\mathbb{R}^n \to \mathbb{R}^m\) defined by \(L_A(x) = Ax\) for some matrix \(A \in \mathbb{R}^{m \times n}\), then \((L_A)^*:L(\mathbb{R}^m, \mathbb{R}) \to L(\mathbb{R}^n, \mathbb{R})\)
+    \end{enumerate}
+
+\end{enumerate}
+
+\subsection*{Hahn Banach}
+\begin{enumerate}
+    \item \textbf{Sublinear}: For \(X\) a linear space over \(\mathbb{R}\), a map \(\rho : X \to \mathbb{R}\) is called sublinear if \(\rho(\alpha x) = \alpha \rho(x)\) for all \(x \in X, \alpha \geq 0\) and if \(\rho(x+ y) \leq \rho(x)+ \rho(y)\). Important examples are \textcolor{blue}{norms}.
+    
+    \item \textbf{Zorn}: For poset \((P, \leq)\) such that every totally ordered subset \(S \subset P\), \(P\) has a maximal element. Some definitions in the lemma are
+    \begin{enumerate} [a.]
+        \item Partial Order: \((P, \leq)\) (ie. \(a \leq b \wedge b \leq a \implies a = b\) and transitivity \(a\leq b \wedge b\leq c \implies a\leq c\)
+        \item Total Order:  \(a, b \in S \implies a \leq b \vee b\leq a\)
+        \item Maximal Element: \(b\) is a maximal element if \(b \leq a \implies b = a\; \forall \;\ a \in P\).
+    \end{enumerate} 
+    Important example of partial order is \((2^X, \subseteq)\) for set \(X\).
+
+    \item \textbf{HB}: For a linear subspace \(M \subset X\), a linear space over \(\mathbb{R}\), if we have a sublinear functional \(\rho : X \to \mathbb{R}\) and linear \(f: M \to \mathbb{R}\) which is bounded above by \(\rho\) for all \(x \in M\), then we can extend \(f\) to linear \(F:X \to \mathbb{R}\) such that \(F|_M = f\) and \(F \leq \rho\) for all \(x \in X\).
+
+    \textbf{Pf}: The general strategy of this Pf is to extend \(f\) iteratively in directions \(x_i \in X\setminus M_i \) and show that each \(f_i\) is linear, its restriction on M is \(f\) and that it respects the bound by \(p\). We can construct the following poset \((P, \leq)\)
+    \begin{gather*}
+    P = \{(N, g):\text{subspace }N\subset X, \text{ linear }g:N \to \mathbb{R}:g|_M = f, \; g\leq p\}  \\
+    \text{order: }  (N_i, g_i) \leq (N_j, g_j) \iff N_i\subset N_j \wedge g_j|_{N_i} = g_i
+    \end{gather*}
+    Then taking any totally ordered set \(\{(N_i, g_i)\}_{i \in I}\) we can find an upper bound \((N, g) = (\cup_iN_i, x\mapsto g_i(x) \text{ if }x_i \in N_i)\) which we can show is in \(P\). Then by Zorn's lemma, we have the existence of a maximal element \((\overline{N}, \bar g)\) and we can prove \(\bar N = X\) and hence the desired \(F= \bar g\) which inherits all the requirements.
+
+    \item \textbf{Supplementary Theorems and Corollaries:}
+    \begin{enumerate} [a.]
+        \item Subspace \(M \subset X\) normed \(X\) and \(f \in M^* \implies \; \exists\; F \in X^* : F|_M = f, ||F||_{X^*} = ||f||_{M^*}\)
+        \item For all \(x \in X\) normed over \(\mathbb{R}\), \(\exists\; x^* \in X^* : x^*(x) = ||x||_X^2 = ||x^*||_*^2\)
+        \item For all \(x, y \in X: x\neq y\), \(\exists\; \ell \in X^*:\ell(x) \neq \ell(y)\).
+        \item For closed subspace \(M \subset X\) and \(x_0 \notin M\), \(\exists \;\ell \in X^*: \ell|_M = 0, \;||\ell||_* = 1\) and \(\ell(x_0) = d:= \inf_{x\in M}||x-x_0||_X>0\).
+        \item Can recover b) from d) by using \(M = \{0\}\).
+        \item \(X^* \text{ separable} \implies X \text{ separable}\) which gives us that \((\ell^\infty)^* \not\cong \ell^1\) as \(\ell^1\) is separable and if it were isomorphic then we would have \(\ell^\infty\) is separable which it isnt.
+        \item Dual characterisation of Norm. For all \(x \in X\), \(||x||_X = \sup_{||x^*|| \leq 1} |\langle x^*, x\rangle| \) and for all \(x^* \in X^*\), \(||x^*||_* = \sup_{||x||_X\leq 1} |\langle x^*, x\rangle|\) which is true by definition. Striking because we can learn about the norm by just working in the dual space.
+        \item For normed \(X, Y\) and \(A\in L(X, Y)\), the dual operator \(A^* :Y^* \to X^*\) is bounded and \(||A^*|| = ||A||\) under their respective norms.
+    \end{enumerate}
+\end{enumerate}
+
+\subsection*{Baire and UBP}
+
+\begin{enumerate} 
+
+    \item \textbf{Interior}: For a topological space \(X, \tau\), the interior of a set is given by int \((A) = A^\circ = \cup_{G\in \tau, G\subset A}\)
+    \item \textbf{Closure}: The closure is given by \(\bar A = \cap_{G \text{ closed, }A \subset G}\)
+
+    \item \textbf{Equivalent Lemma:} If for complete metric space \((X, d)\), \(\emptyset \neq X = \cup_{k\in \mathbb{N}} A_k\) for closed \(A_k\) then there exists \(A_k\) with non empty interior.
+
+    \textbf{Pf:} Assume \(A_k^\circ = \emptyset\) for all \(k \in \mathbb{N}\) and pick \(x \in X\setminus A_1 = X\cap A_1^c \neq \emptyset\) (\(A_1 \neq X\) because \(X^\circ = X\neq \emptyset\) which is an open set so we can find \(0<r_1<2^{-1}\) such that \(B(x_1, r_1) \subset X\setminus A_1\). Then find another point closer to \(x_1\) which is not in \(A_2\) aswell and repeat which we can do because again the set difference is open. Ultimately, we will construct a cauchy sequence which is not in all \(A_k\) so \(x^* \not \in \cup_k A_k = X\) which violates completeness. \textcolor{blue}{Trick:} build a cauchy sequence whose elements are outside each consuming set and then because of completeness we can generate a contradiction.
+
+    \item \textbf{Meager:} \(A \subset X\) is \textbf{meager} if \(A = \cup _k A_k\) with nowhere dense sets \(A_k\) (ie. int\(\left(\overline{A}\right) = \emptyset\)) and we say cat\((A) = 1\) or A is of the 1st catagory. \(A\) is \textbf{fat} or of second baire catagory if it is not meager.\\
+    \textbf{Examples and Remarks:} 
+    \begin{enumerate} [a.]
+        \item \(A \subset M \implies A\) is meagre.
+        \item Countable union of meagre sets is meagre.
+        \item \(\mathbb{Q} = \cup_i \{q_i\}\) is a countable union of nowhere dense singletons so \(\mathbb{Q}\) is meagre and it is dense.
+        \item The theorem implies that for all complete non-empty metric spaces, there are fat sets.
+        \item \((X, d)\) complete, \(A \subset X \neq \emptyset\), cat\((A) = 1\implies \text{cat}(X\setminus A) = 2\) and \(X\setminus A\) is dense.
+        \item \(\emptyset \neq U \subset X\) open, dense \(\implies X\setminus U\) is closed and nowhere dense
+        \item Open sets are fat which can be shown by supposing cat\((U) = 1\) then \(X\setminus U\) is dense and therefore \(X = \overline{X\setminus U} = X\setminus U\) as \((X\setminus U)\) is closed. So \(U = \emptyset\) and we have a contradiction.
+        \item Topological and measure theoretic sizes are different.
+    \end{enumerate}
+    
+    \item \textbf{Baire Catagory Theorem}: For complete metric space \((X, d)\) with \(X \neq \emptyset\), we have \(X\) is fat, cat\((X) = 2\). This is a reformulation basically saying that \(X\) is not a countable union of nowhere dense sets because by the previous lemma we have that atleast one of the composing sets has a non empty interior so it is not nowhere dense.
+
+    \textbf{Remark}: We get from a metric notion, a topological notion. So really if we can find an equivalent metric, \(\tilde d\) such that \((X, \tilde d)\) is complete and also induces the same topology (because they are equivalent) we can come to the same conclusion.
+
+    \item \textbf{Uniform Boundedness Principle}: For complete \((X,d)\) and family of continuous functions \((f_i)_{i \in I}\), if \(f_i:X \to \mathbb{R}\) is bounded pointwise \(\sup_i |f_i(x)| < \infty \; \forall\; x \in X\) then there exists an openball \(B \subset X\) with \(\sup_{i \in I, x \in B}|f_i(x)| < \infty\) ie \(\sup_i \sup_x |f_i(x)| \leq N < \infty\).
+
+    \textbf{Pf}: We want to use the Baire Category Theorem which says that for a complete non empty metric space \((X,d)\), \(X\) is fat, ie. it is not a countable union of nowhere dense sets, so atleast one of the sets which make it up, \(A_k\) has \(\bar A_k^\circ \neq \emptyset\). So we construct such a consuming set \(A_k = \{x\in X:\forall \; i \in I, |f_i(x)| \leq k\} = \cap_{i \in I}\{x \in X: |f_i(x)|\leq k\}\) so it is a intersection of closed sets, hence closed (equal to its closure) and as as \(\cup_{k \geq 1} A_k = X\), by the Baire category theorem (X is complete), we have that for atleast one \(k\), \(A_k \neq \emptyset\) and hence we can pick the desired ball inside this \(A_k\) because it has a non empty interior.
+
+    \item \textbf{Banach-Steinhous}: Can relax to all of \(X\) by consider linear maps \(A \in \mathcal{L}(X,Y)\) where \(X, Y\) are normed vector spaces, \(X\) complete, to get that if we have \((A_i)_{i \in I}\) such that \(\sup_i||A_i x||_Y < \infty \; \forall \; x \in X\) then \((A_i)\) is bounded uniformly, ie. \(\sup_i||A_i||_{L(X,Y)} < \infty\)
+
+    \textbf{Pf}: By the uniform boundedness principle, we have that there is an open ball \(B\) such that \(\sup_{x \in B}\sup_{i \in I} ||A_ix_i||_Y \leq R \in \mathbb{R}\) and by linearity we have that the operator norm is bounded and given by \(r^{-1}\) of the one above. We have used in the above that \(x \mapsto ||A_ix||_Y\) is a continuous map.\\
+
+    \textbf{Example:} \(X, Y\) normed, \(X\) complete and \(A_k \in L(X,Y)\) which converge pointwise to \(A\) then \(A \in L(X,Y)\) and \(||A||_{L(X,Y)} \leq \liminf ||A_k||_{L(X, Y) } < \infty\). 
+
+    \item \textbf{Original Problem}: For a sequence of continous functions \(f_n : [0,1] \to \mathbb{R}\) with \(f(x) := \lim_{n\to \infty}f_n(x)\), does \(f(x)\) have any points of continuity?\\
+
+    \textbf{Theorem}: For complete metric space \((X,d)\) and sequence of continuous functions \(f_n\), the set \(R = \{x \in X: f :=\lim_{n \to \infty} f_n \text{ continuous at }x\} \) is dense.
+\end{enumerate}
+
+\subsection*{Open Mapping}
+
+\(X, Y\) normed and \(A:X\to Y\) linear
+
+\begin{enumerate}
+    \item \textbf{Open}: \(A\) is open if \(A(U)\) is open for all open \(U \subset X\). \textbf{rmk:} Continuous need not be open \(A:x \mapsto 0\).
+    \item \textbf{Open Mapping Theorem:} Banach \(X, Y\) and \(A \in L(X,Y)\) then 
+    \begin{enumerate} [a.]
+        \item \(A\) surjective \(\implies A\) open
+        \item \(A\) bijective \(\implies A^{-1} \in L(X,Y)\)
+    \end{enumerate}
+    \textbf{Pf sktch:} i) implies ii) immediately by checking it is linear and continuous. The main work of the Pf is in the lemma which says that there exists \(r> 0\) such that \(B_Y(r) \subset \overline{A(B_X(1))}\), ie int\(\overline{A(B_X(1)} \neq \emptyset\). Then we pick such an \(r\) and claim that \(B_Y(r/2) \subset A(B_X(1))\) and this gives us that for any open \(U \subset X\) and \(x_0 \in U\), there exists a ball around \(x_0\) such that it is contained in \(A(U)\), therefore any point in \(A(U)\) has an open ball around it contained in \(A(U)\) and hence \(A(U)\) is open.
+    
+    \textbf{Examples:} 
+    \vspace{-0.2cm}
+    \begin{enumerate} [a.]
+        \item For Banach \(X\), one norm is equivalent to another norm if the identity map between them is bounded.
+        \item Also, the identity map need not be open as we can take \(A = id :(C[0,1], ||\cdot||_{L^1}) \to (C[0,1], ||\cdot||_{\infty})\) and we see \(A\) is not open because if we take the open ball in \((X, ||\cdot||_{L^1})\) then no \(\epsilon-\)ball under the sup norm is contained in it so it isnt open.
+        \item Revisit this last item which shows that completeness is needed and that we can show that a space is not complete by creating a bijective bounded operator which has unbounded inverse.
+    \end{enumerate}
+\end{enumerate}
+
+\subsection*{Closed Graph}
+
+For \(X, Y\) normed spaces and linear \(A: X \supset D(A) \to Y\) where \(D(A)\) is a linear subspace of \(X\).
+
+\begin{enumerate}
+    \item \textbf{Graph}: \(\Gamma_A = \{(x, Ax):x \in D(A)\} \subset X \times Y\) and we endow it with the norm \(||(x,y)||_{X \times Y} = ||x||_X + ||y||_Y\).
+    \item \textbf{Closed}: \(A\) is closed if \(\Gamma_A\) is closed in the space \((X\times Y, ||(x,y)||_{X \times Y})\).
+    \item \textbf{CGT}: \(X, Y\) banach and \(A:X \to Y\) linear then \(A \in L(X,Y) \iff A\) closed. \textbf{Rmk:} ii is useful because it says that if \(x_n \to x\) and \(Ax_n \to y\) then \(Ax = y\).
+    
+    \textbf{Pf:} Showing the leftward implication, assume \(A\) is closed. Then consider the projection maps \(\pi_X: \Gamma_A \to X\) and \(\pi_Y:\Gamma_A \to Y\) then we see that both these maps are bounded linear operators. Then as we have that \(\Gamma_A\) is complete under the graph norm, we have by the open mapping theorem that \(\pi_X^{-1}\) is bounded and hence \(A = \pi_Y \circ \pi_X^{-1}\) is bounded.
+
+    \textbf{Example} \(X = C[0,1], D(A) = C^1[0,1]\) which is dense in \(C[0,1]\) and \(A:D(A) \to C[0,1]\) defined by \(Af = f'\). However \((D(A), ||\cdot||_\infty)\) is not banach and its closure is \(C[0,1]\). We can claim that \(A\) is closed but \(A \notin L(X,Y)\). It isnt continuous because we can take the sequnce \(f_n(x) = x^n\) and get \(||Af_n|| \leq ||A||_{L(D(A), Y)}||f_n||_\infty = ||A||\) and the left hand side blows up so \(A\) is unbounded. To show that it is closed we take \(f_n \to f\) and \(Af_n \to g\) and show \(Af = g\). Then by FTC we have \(f_n(x) = \int_0^1 f'_n(t)\;dt + f_n(0)\) and by dominated convergence we have that \(\int_0^1 f'_n(t)\;dt \to \int_0^1 g(t)\;dt \implies g = f'\).
+
+    \textbf{General strategy:} To show \(A\) is closed:
+    \vspace{-0.2cm}
+    \begin{enumerate} [a.]
+        \item Take \((x_n) \subset D(A):x_n \to x \) and \(Ax_n \to y\)
+        \item Show \(x \in D(A)\)
+        \item Show \(Ax = y\)
+    \end{enumerate}
+
+    \item \textbf{Cor: Continuous Inverse} For Banach \(X, Y\), \(A:D(A) \to Y\) is closed and bijective then \(\exists \; B = A^{-1} \in L(Y,X):BA = id_X \) and \(AB = id_Y\). \textbf{Rmk:} Don't need completeness of \(D(A)\).
+
+    \item \textbf{Extension}: \(B:D(B) \to Y\) is an extension of \(A:D(A) \to Y\) if \(D(A) \subset D(B) \subset X\) and \(B|_{D(A)} = A\)
+
+    \item \textbf{Closable Operator}: \(A\) is closable if there is an extension \(B\) such that \(\Gamma_B = \overline{\Gamma_A}\)
+
+    \item \(A\) closable \(\iff \) (for all \((x_k, Ax_k) \subset \Gamma_A\) with \(x_k \to 0, Ax\to y \implies y = 0\)).
+
+    \textbf{pf:} for the leftward implication, take \((x_k, Ax_k) \subset \Gamma_A\) with \(x_k \to 0, Ax_k \to y\), then there is an extension \(\bar A\) and \(\bar Ax_k \to y = \bar A0 = 0 \implies y = 0\). For the rightward implication, we can construct an extension \(B = \lim Ax_k\) for \((x_k, Ax_k ) \in \Gamma_A:x_k \to x \) and \(Ax_k \to y\) for \((x, y) \in \overline{\Gamma_A}\). Then \(B\) is linear and because \(Bx = y\), the graph of \(B\) is closed and \(B\) is a valid extension. [IFFY].
+
+    \textbf{Extension, Example}:
+    \begin{enumerate} [a.]
+        \item \(X, Y\) banach and \(D(A) \subset X\) a linear subsepace, \(A\) continuous on \(D(A) \implies A\) is closable.
+        \item \(X = L^2(\mathbb{R}), D(A) = \{f \in L^2(\mathbb{R}):f \text{ compact support}\}\) then \(Af = \int_{\mathbb{R}}f\;d\lambda\) then take \(f_k = \mathbf{1}_{[0,k]}/k \overset{||\cdot||_2}\to 0\) but \(Af_k = 1 \not \to 0\). So this operator is not closable.
+        \item For open and bounded, \(\Omega \subset \mathbb{R} ,  \Delta :C^\infty_0(\Omega)\to L^2(\Omega)\) denoting the laplacian, we see that \(\Delta\) is closable because we can take any \(u_k \in C^\infty_0(\Omega), f_k \in L^2(\Omega): u_k \to 0\) and \(f_k \to f\) and check that \(f = 0\; a.e.\).
+    \end{enumerate}
+\end{enumerate}
+
+\subsection*{Weak Topologies}
+
+For normed space \((X, ||\cdot||_X)\) and its dual \(X^*\)
+
+\begin{enumerate}
+    \item \textbf{Weak Convergence}: \((x_n)\) with \(x_n \in X\) converges weakly to \(x \in X\) (denoted by \(x_n \overset{w}{\to} x\)) if for all \(\ell \in X^*\), \(\ell(x_n) \to \ell(x)\). 
+
+    \textcolor{red}{Counterexample:} \((x_n) = (e_n) \in \ell^2\) but as we have see \(x_n\) does not converge strongly but it does converge weakly because by Reisz representation, for any \(\ell \in (\ell^2)^*\),  we can find \(y \in \ell^2\) such that \(\ell = \langle y, \cdot \rangle\) and hence \(|\ell(x_n)| = |\langle y, x_n\rangle| = |y^{(n)}|\leq \sqrt{\sum_{k\geq n}|y^{(n)}|^2} \to 0\).
+
+    Properties:
+    \begin{enumerate} [a.]
+        \item Limits are unique (use point separating functional corollary of Hahn Banach)
+        \item \(x_n \overset{w}{\to} x\) then \(\sup_n ||x_n|| < \infty\). Working in the bidual we define \(A_n \in L(X^*, \mathbb{R})\) such that \(A_n(\ell) = \ell(x_n)\) and we see that \(x_n \overset{w}{\to} x \implies \sup|\ell(x_n)| < \infty, \; \forall \; \ell \in X^*\) hence \(A_n \) is a family of pointwise bounded linear operators and we can apply Banach Steinhaus to get a uniform bound, \(\forall n, \infty > ||A_n||_{L(X^*, \mathbb{R}) }=\sup_{||\ell|| \leq 1} |\ell(x_n)| = ||\ell||_*||x_n||_X = ||x_n||\).
+    \end{enumerate}
+
+    \item \textbf{Strong Convergence}: Strong convergence \(x_n \to x\) if \(||x_n - x|| \to 0\).
+
+    \item \textbf{Bidual}: \(X^{**} = (X^*)^* = L(X^*, \mathbb{R})\) define \(\iota :  X\to X^{**}\) with \(\iota(x)(\ell) = \ell(x)\) and this is isometric because \(||x||_X = \sup_{||\ell||^* \leq 1} |\ell(x)|= \sup_{||\ell||^* \leq 1} |\iota(x)(\ell)| = ||\iota(x)||_{**}\)
+    
+    \item \textbf{Reflexive}: \(X\) is reflective if \(\iota\) is surjective.
+
+    \textbf{Examples:}
+    \begin{enumerate} [a.]
+        \item If dim\((X)<\infty\) then dim\((X) = \) dim\((X^{**})\) and by rank nullity, \(\iota\) has full rank and hence is surjective.
+        \item If \(H\) is hilbert, then \(H\) is reflexive.
+        \item \(L^p(\Omega, \mathcal{A}, \mu)\) is reflexive for \(1<p<\infty\).
+    \end{enumerate}
+
+    \item \textbf{Weak* Convergence}: \((\ell_n)\) with \(\ell_n \in X^*\) is weak* convergent if \(\ell_n(x) \to \ell(x)\) for all \(x \in X\). This is equivalent to saying \(\ell_n \overset{w^*}{\to} \ell \iff \forall\; z \in \iota(X), \;z(\ell_n) \to z(\ell)\), which in the reflexive case would be equivalent to weak convergence of \(\ell_n\).
+
+    \item \textbf{Implications}:
+    \begin{enumerate} [a.]
+        \item For \(\ell_n \in X\), \(\ell_n \to \ell \implies \ell_n \overset{w}{\to} \ell \implies \ell_n \overset{w*}{\to} \ell \). 
+        \item \(X\) reflexive \(\implies\) (\(\ell_n \overset{w}{\to} \ell \iff \ell_n \overset{w*}{\to} \ell\))
+    \end{enumerate}
+
+    \item \textbf{Banach-Alaoglu}: For separable \(X\), if the sequence \((\ell_n)\) in \(X^*\) is bounded (uniformly) then there exists \(\ell\) and a subsequence \((\ell_n)_{n \in \Lambda \subset \mathbb{N}}\) such that \(\ell_n \overset{w*}{\to} \ell \) as \(n \in \Lambda \subset \mathbb{N} \to \infty\).
+
+    \textbf{Pf:} The proof of this is that we pick a dense sequence \((x_n)\subset X\) then we choose subsequence \(\Lambda_1 \subset \mathbb{N}\) such that \(\ell_n(x_1) \to a_1\) by bolzano weierstrass then we pick the diagonal sequence such that it convergent for all \((x_n)\) so define \(\ell(x_i) = \lim_{n \in \Lambda \to \infty} \ell_n(x_i)\) and therefore \(\ell\) is defined on span\(\{x_n\}\) is bounded because \(||\ell(x)||_* \leq \sup_n||\ell_n||_*||x|| \leq C||x||\) by the boundedness of \(||\ell_n||\) and hence there is an extension of \(\ell\) by cor of HB to the whole of \(X\). Then we have to show that \(\ell_n \to_{w*} \ell \) so pick \(x \in X\) and choose \(J\subset \mathbb{N}:x_n \to x\) for \(n \in J \to \infty\) and using an \(\epsilon /3\) argument we can show that \(|\ell_n(x) - \ell(x)| \leq |\ell_n(x-x_j)| + |\ell(x_j - x)| + |\ell_n(x_j)- \ell(x_j)|\leq (\sup||\ell_n||_* + ||\ell||_*)||x-x_j|| + |\ell_n(x_j)- \ell(x_j)| \to 0\) as \(j \in J \to \infty\) and \(n \in \Lambda \to \infty\). 
+
+    \textbf{Rmk:} If \(X\) is reflexive, separability can be removed. And hence if \(H\) is hilbert, then we can lose a layer of stars to get for all bounded sequences, \(x_n \in H\), then there is a subsequence which weakly converges.
+
+    \textbf{Example:}
+    \begin{enumerate} [a.]
+        \item \(X = L^1[0,1], X^* \cong L^\infty\) so taking \(\ell_{f_n} = \int |f_ng|d\lambda \subset X^*\) bounded where \(f^* \in L^\infty\), we can find by Banach Alauglu, such that \(\ell_{f_n} \to_w \ell\) and by Reisz Representation we can identify \(\ell\) with \(f \in L^\infty\).
+        \item \(X = L^\infty[0,1]\) not separable so we can a subset of operators with bounded norm in \(X^*\) such that the set is not weak* sequentially compact (ie not all sequences contain weak* convergent subsequence.
+        \item But if we instead use \(X = C^0[0,1] \subset L^\infty\) then the theorem applies because \(X\) is separable.
+    \end{enumerate}
+
+    \item Classical form: For normed \(X\), the closed unit ball in \(X^*\) is compact in the weak topology. Separable implies sequentially compact.
+\end{enumerate}
+
+\subsection*{Compact Operators}
+
+\begin{enumerate}
+    \item \textbf{Compact Operators}: For \(X, Y\) normed and linear \(T:X \to Y\), \(T\) is a compact operator if for all bounded \(B \subset X\), \(\overline{T(B)}\) is sequentially compact.
+
+    \item \textbf{Equivalencies in Banach}: If \(X, Y\) are banach then TFAE
+    \begin{enumerate} [a.]
+        \item \(T\) is compact
+        \item \(\overline{T(B_X(1))}\) is sequentially compact
+        \item For all bounded sequences \((x_n)\) in \(X\), \((Tx_n)\) has a cauchy sequence. 
+    \end{enumerate}
+    \textbf{Pf:} c) to a) For bounded \(B \subset X\), and \((y_n) \subset T(B)\), \(y_n = Tx_n\) for some \(x_n\in B\) so \(x_n\) is bounded and hence \(Tx_n = y_n\) has a cauchy (convergent here) subsequence. a) to c) \(B_X(1)\) is bounded and by definition of compact operator \(\overline{T(B_X(1))}\) is sequentially compact. b) to c) If \((x_n)\) is bounded then there exists \(r > 0:(x_n) \subset B_X(r)\) hence by linearity of \(T\), \(\overline{T(B_X(r))}\) is sequentially compact and hence as \(Tx_n\) is in this sequentiall compact set, it has a convergent \(\implies\) cauchy subsequence.
+
+    \textbf{Examples}:
+    \begin{enumerate} [a.]
+        \item \(T= id\) is a compact operator \(\iff\) dim\(X<\infty\).
+        \item \(T\) has finite rank if dim\((T) < \infty\) and operators \(T \in L(X,Y)\) with finite rank are compact because \(||Tx_n|| \leq ||T||_{L(X,Y)}||x_n|| \leq C\) and therefore \(Tx_n\) is a bounded sequence in a finite dimension space and hence has a convergent subsequence.
+        \item If dim\((X)< \infty\) then \(T\) is compact.
+        \item For \(1 \leq p \leq \infty\) and \(\lambda_n \in \mathbb{R}\) with \(\sup|\lambda_n| < \infty\) then if \(T_\lambda x := (x_n \lambda_n) \) is compact then \(\lambda_n \to 0\). We can show this by basically saying that if it does not go to 0, then there is a subsequence \(\Lambda \subset \mathbb{N}\) such that \(\forall n \in \Lambda, \lambda_n \geq \delta\) and hence by taking the sequence \((e_m)\) which is bounded and forming the subsequence \(T_\lambda e_m\) for \(m \in \Lambda\), this sequence has no convergent subsequence because it is not cauchy as \(||T_\lambda x_m - T_\lambda x_n|| \geq 2 \delta^{1/p} , \forall \; m\neq n\).
+    \end{enumerate}
+    
+    \item \textbf{Compactness under Convergence}: If the sequence of compact operators \(T_n : X \to Y\) converges under \(||\cdot||_{L(X,Y)}\) to \(T \in L(X,Y)\) then \(T\) is a compact operator. This also means that the space of compact operators is closed.
+
+    \item \textbf{Important Examples}
+\end{enumerate}
+
+\subsection*{Spectrums}
+
+For \(X\) banach over \(\mathbb{C}\), and linear \(A:X \supset D_A \to X\).
+
+\begin{enumerate}
+    \item \textbf{Resolvent Set}: \(\rho(A) = \{\lambda \in \mathbb{C}: (\lambda I - A): D_A \to X\) is bijective with \((\lambda - A)^{-1} \in L(X)\}\). This is closed.
+
+    \item \textbf{Resolvent}: The resolvent of A is given by \(R: \rho(A) \to L(X) \text{ such that } R(\lambda) :=R_\lambda= (\lambda - A)^{-1}\)
+
+    \item \textbf{Spectrum}: \(\sigma(A) = \mathbb{C}\setminus \rho(A)\). This is open because resolvent in closed.
+
+    \item \textbf{Classification of Spectrum for Closed A}:
+    \begin{enumerate}[a.]
+        \item \textbf{Point}: \(\sigma_p(A) = \{\lambda \in \mathbb{C}:(\lambda- A)\) not injective\(\}\)
+        \item \textbf{Continuous}: \(\sigma_c(A) = \{\lambda \in \mathbb{C}:(\lambda- A)\) injective and im\((\lambda- A)\) dense\(\}\)
+        \item \textbf{Residual}: \(\sigma(A)\setminus(\sigma_p(A) \cup \sigma_c(A))\)
+    \end{enumerate}
+
+\end{enumerate}
+
+\subsection*{Spectral Theory for Hilbert Spaces}
+
+Hilbert space \((H, \langle\cdot, \cdot\rangle) \) over \(\mathbb{C}\) and \(A: H\supset D_A \to H\) where \(D_A\) is linear and dense and adjoint \(A^*\) which in the hilbert space setting is \(A^* \in H: \langle A^*y, x\rangle = \langle y, Ax\rangle \) with domain \(D_{A^*} = \{y \in H:x \mapsto \langle y, Ax\rangle \text{ is continuous on } D_A\}\)
+
+\begin{enumerate}
+    \item \textbf{Symmetric}: \(A \subset A^*\), ie. \(D_A \subset D_{A^*}\) and \(A^*|_{D_{A}} = A\).
+    \item \textbf{Self Adjoint}: \(A = A^*\)
+    \item \textbf{Symmetric}: \(A \subset A^* \implies \sigma_p(A) \subset \mathbb{R}\).
+
+    \textbf{Pf:} \(0 \neq \lambda \in \sigma_p(A)\) and \(x \in \ker(\lambda - A)\) then \(\lambda ||x||^2 = \lambda\langle x, x\rangle = \overline{\langle Ax, x\rangle} = \bar \lambda ||x||^2 \implies \lambda = \bar \lambda \implies \lambda \in \mathbb{R}\).
+
+
+    \textcolor{red}{Couterexamples:}
+    \item \textbf{Self Adjoint}: \(A = A^* \implies \sigma(A) \subset \mathbb{R}\)
+
+    \textbf{Lemma}: \(A = A^* \implies A\) closed. \textbf{Pf:} Take \(x_n \to x, Ax_n \to y\). We have \(x \in D_A\), we can then use the continuity of inner product to show that \(Ax = y\).
+
+    \textbf{Lemma}: \(A \subset A^* \implies z \in \mathbb{C}, u \in D_A \implies ||(z-A)u|| \geq |\Im(z)|||u||\). \textbf{Pf:} \(\)
+
+    \textbf{Pf:} The main strategy for this proof is picking \(z \in \mathbb{C}\setminus\mathbb{R}\) and showing \(z -A \) is invertible and inverse is bounded. The lemma implies that \(z - A\) is injective so we have to show surjectivity and boundedness. First argue that Im\((z -A)\) is closed so taking a convergent sequence in the image \(v_k = (z-A)u_k \to v\) for some \(u_k \in H\). Then we see \(||u_n - u_m|| \leq ||v_n -v_m||/|\Im(z)| \to 0 \implies (u_k)\)  is cauchy and hence the limit \(u \in D_A\). Then as \(A\) is closed, we have that \((z-A)u = v\) so \(v \in \text{Im}(z-A)\setminus{0}:=W\setminus{0}\). Assuming \(W \neq H\), we can take \(v \in W^\perp\) and note \(\langle v, (z - A)u\rangle = 0 \implies \bar z\langle v, u \rangle = \langle v, Au\rangle \implies v \in D_{A^*} = D_A \implies Av = \bar z v\) (why?). Then we have \(|\Im(z)|||v|| \leq ||(z - A)v|| = 0 \implies v = 0\). Thus \(W = H\) and \(A\) is surjective and hence bijective. To show boundedness, we have
+
+    
+    \item \textbf{Riesz Schauder}: \(A:H \to H\) compact and self adjoint then
+    \begin{enumerate} [a.]
+        \item \(\sigma_p(A) \subset \mathbb{R}\)
+        \item At most countably many eigenvalue \(\lambda_k \in \mathbb{R}\setminus\{0\}\) which can only accumulate at \(\lambda = 0\). 
+        \item Eigenspace of each \(\lambda_k \neq 0\) is finite dimensional.
+        \item We can choose \(\{e_k\}: e_k \perp e_l\) for \(k \neq l\) and for all \(x \in H\), \(Ax = \sum_k \lambda_k e_k \langle x, e_k\rangle\)
+    \end{enumerate}
+
+    \textbf{Lemma 1:} If \(\lambda_1 \neq \lambda_2 \in \sigma_p(A)\) then the corresponding eigenvectors \(e_1, e_2\) are orthogonal, ie \(e_1 \perp e_2\). \textbf{Pf:} Taking such \(\lambda\), we see \(\lambda_1\langle e_1, e_2\rangle = \langle Te_1, e_2 \rangle = \langle e_1, T e_2\rangle = \langle e_1, \lambda_2 e_2\rangle = \bar \lambda_2 \langle e_1, e_2\rangle = \lambda_2 \langle e_1, e_2\rangle \implies \langle e_1, e_2\rangle = 0\)
+
+    \textbf{Lemma 2:} For \(\lambda \in \sigma_p(A) \setminus \{0\}\), dim\(X_\lambda< \infty\) and \(\sigma_p(A) \setminus B_r(0)\) is finite for \(r>0\). \textbf{Pf:} As T is a compact operator \(\overline{T(B_{X_\lambda}(1, 0))} = \overline{\lambda(B_{X_\lambda}(1, 0))}\) is compact and by linearity the closed unit ball in \(X_\lambda\) is compact which is equivalent to the dimension being finite. Next to show that \(\sigma_p(A) \setminus B_r(0)\) is finite for \(r>0\), assume not and pick a sequence \(\lambda_k \in \sigma_p(A)\) with \(|\lambda_k| > r\) and \(k \neq l \implies \lambda_k \neq \lambda_l\) then we can find the associated sequence of normalised eigenvectors which is bounded and by compactness of \(T\), we can identify a convergent subsequence \(Te_k = \lambda_ke_k \to y \in H\) for \(k \in \Lambda \subset \mathbb{N}\) so \(\lambda_ke_k\) is cauchy so taking \(||\lambda_k e_k - \lambda_l e_l||^2 = |\lambda_k|^2 + |\lambda_l|^2 >2r\) and we reach a contradiction so the point spectrum has finitely many elements outside an open ball around 0.
+
+    \textbf{Pf:} Defining the eigenspace \(X_\lambda = \ker (\lambda - A)\) for \(\lambda \in \sigma_p(A)\) we have \(X_\lambda \perp X_{\lambda'}\) for \(\lambda \neq \lambda'\) by lemma 1. a) follows from the fact that \(A\) is self adjoint. For b) take the annulus \(A_n = \{z \in \mathbb{C}: (n-1)^{-1} \leq z < 1/n\}\) which is finite by lemma 2 and we see that \(\sigma_p(A) \setminus \{0\}= \cup_n A_n\) and hence it is countable and also we cannot accumulate at non zero point. c) follows from lemma 2.
+
+    For d) we can conduct gram schmidt on each of the eigenspaces to get a sequence of eigenvectors \((e_k)\). Denote \(X = \overline{\text{span}(\{e_k\})}\) and we can show that for all \(x \in X\), \(x = \sum_k \langle x, e_k\rangle e_k\) which by continuity of \(A\) we get for all \(x \in X\), \(x = \sum_k \langle x, e_k\rangle Te_k\). Then if we show that \(X^\perp =\ker A\), we are done because \(H = X \oplus \ker T\) means we have d) for all \(x \in H\).
+
+    
+\end{enumerate}
+
+\end{document}
